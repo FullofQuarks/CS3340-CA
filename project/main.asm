@@ -131,8 +131,8 @@ selectCombinatorics_k: #Prompt and save k value
 	
 compareCombinatoricValues: # Compare n and k values
 	
-	li	$t1,	input_n
-	li	$t2,	input_k	
+	lw	$t1,	input_n
+	lw	$t2,	input_k	
 	
 	beq	$t1,	$t2,	returnValueOfOne	#if n = k then return 1
 	blt	$t2,	$t1,	Combinatorics_prep	# valid values of n & k, begin processing with these values		
