@@ -9,8 +9,9 @@ choice_5:	.asciiz "5) Binomial PDF\n"
 choice_error:	.asciiz "You did not enter any of the given choices! Try again.\n\n"
 choice_exit:	.asciiz "0) Exit\n"
 choice_prompt:	.asciiz "\nEnter your choice: "
-prompt_n:	.asciiz "Please enter a n value: "
-prompt_k:	.asciiz "Please enter a k value: "
+prompt_n:	.asciiz "Please enter a n value at or below 10: "
+prompt_k:	.asciiz "Please enter a k value at or below 10: "
+prompt_nk_over:	.asciiz "That value is over 10! Going back to menu.\n"
 comb3:		.asciiz "\nThe combination answer is: "
 input_n:	.word    0
 input_k:	.word    0
@@ -82,6 +83,8 @@ menu:	la	$a0, prompt_eq
 	li	$v0, 5
 	syscall	#If the user doesn't enter an integer, the error will occur here!
 	sw	$v0, input_n
+	sge	$t0, $v0, 11  #error checking if n is over 10
+	beq	$t0, 1, nk_over
 	
 	#Prompt for k
 	la	$a0, prompt_k
@@ -91,6 +94,8 @@ menu:	la	$a0, prompt_eq
 	li	$v0, 5
 	syscall
 	sw	$v0, input_k
+	sge	$t0, $v0, 11  #error checking if k is over 10
+	beq	$t0, 1, nk_over
 
 	beq	$t3, 1, combination_wo_replacement_loop_numerator
 	beq	$t3, 2, combination_w_replacement_loop
@@ -102,7 +107,13 @@ menu:	la	$a0, prompt_eq
 	li	$v0, 4
 	syscall
 	j	menu
-                
+        
+        #If the user entered n or k greater than 10
+nk_over:
+	la	$a0, prompt_nk_over
+	li	$v0, 4
+	syscall
+	j	menu
                 #####if n = k output 1
                 
                 # load the values of n &k, we only have to do this once no matter what the equation is. will cut back on lines. 
@@ -233,7 +244,7 @@ binomial:
 	cvt.d.w	$f14, $f14
 	mul.d	$f16, $f10, $f12
 	mul.d	$f16, $f16, $f14
-	j	exit
+	j	menu
 	
 power:
 	addi	$sp, $sp, -4
