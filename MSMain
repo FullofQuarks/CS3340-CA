@@ -1,0 +1,82 @@
+	.data 
+
+prompt_equation:			.asciiz "Select an equation by entering the number fo the equation below:\n"
+prompt_n:				.asciiz "Please enter a n greater than or equal to 10: "
+prompt_k:				.asciiz "Please enter a k greater than or equal to 10: "
+prompt_numberOfTrials:			.asciiz "Please enter the total number of trials: "
+prompt_numberOfSuccesses:		.asciiz "Please enter the number of successful trials sought: "
+prompt_probabiltySuccess:		.asciiz "Please enter the probabilty of success: "
+
+msg_combinationsWithReplacement:	.asciiz "1) Combinations with replacement\n"
+msg_combinationsWithoutReplacement:	.asciiz "2) Combinations without replacement\n"
+msg_permutationsWithReplacement:	.asciiz "3) Combinations with replacement\n"
+msg_permutationsWithoutReplacement:	.asciiz "4) Permutations without replacement\n"
+msg_binomialPDF:			.asciiz "5) Binomial PDF\n"
+msg_exit:				.asciiz	"0) Exit\n\n"
+msg_invalidSelection:			.asciiz "Invalid Entry!\n"
+msg_error_overflow			.asciiz "Value over 10. Please enter a value under 10\n"
+
+input_n:
+input_k:
+input_numberOfTrials:
+input_numberOfSuccesses:
+input_probabilityOfSuccess:
+
+	.text
+
+.globl main
+
+main:
+	#DEBUG DUMMY VALUES
+	#li	$s0,	1	#initial value of $s0
+	#li	$t1,	5	# n
+	#li	$t2,	3	# k
+	#li 	$s1,	1	#combinations w/ Replacement
+	#li	$s1,	2 	#combinations w/o Replacement
+	#li 	$s1,	3	#permutations w/ Replacement
+	#li	$s1,	4 	#permutations w/o Replacement
+
+menu:	# Menu for Equation Selection
+	
+	la	$a0,	prompt_equation	# Prompt for equation selection
+	li	$v0,	4
+	syscall
+	
+	la	$a0,	msg_combinationsWithReplacement
+	li	$v0,	4
+	syscall
+	
+	la	$a0,	msg_combinationsWithoutReplacement
+	li	$v0,	4
+	syscall
+	
+	la	$a0,	msg_permutationsWithReplacement
+	li	$v0,	4
+	syscall
+	
+	la	$a0,	msg_permutationsWithoutReplacement
+	li	$v0,	4
+	syscall
+	
+	la	$a0,	msg_binomialPDF
+	li	$v0,	4
+	syscall
+	
+	la	$a0,	msg_exit
+	li	$v0,	4
+	syscall
+
+
+	blt	$s1,	3,	Combinations_prep	
+	j	Permutations_prep
+	
+Combinations_prep:
+	jal	Combinations
+	j 	exit
+Permutations_prep:
+	jal	Permutations
+	j 	exit
+	
+exit:
+	li	$v0,	10
+	syscall
