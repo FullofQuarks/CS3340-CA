@@ -135,7 +135,7 @@ compareCombinatoricValues: # Compare n and k values
 	li	$t2,	input_k	
 	
 	beq	$t1,	$t2,	returnValueOfOne	#if n = k then return 1
-	blt	$t2,	$t1,	moveOn			# valid values of n & k, begin processing with these values		
+	blt	$t2,	$t1,	Combinatorics_prep	# valid values of n & k, begin processing with these values		
 	la	$a0,	msg_error_overflow
 	li	$v0,	4
 	syscall
@@ -150,14 +150,30 @@ compareCombinatoricValues: # Compare n and k values
 	blt	$s1,	3,	Combinations_prep	
 	j	Permutations_prep
 
+returnValueOfOne:
+	#NICK WE NEED TO ADD THIS HERE.
+
+
+Combinatorics_prep:
+	
+	beq	$s1,	1,	Combinations_prep
+	beq	$s1,	2,	Combinations_prep
+	beq	$s1,	3,	Permutations_prep
+	beq	$s1,	4,	Permutations_prep
+	#insert invalid selection here	
 	
 Binomial_prep:
+
 	jal 	Binomial
 	j	displayMenu	
+	
 Combinations_prep:
+
 	jal	Combinations
 	j 	displayMenu
+	
 Permutations_prep:
+
 	jal	Permutations
 	j 	displayMenu
 	
