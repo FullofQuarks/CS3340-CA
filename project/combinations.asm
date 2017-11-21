@@ -17,11 +17,11 @@ cwr:	.asciiz "\nCombinations with replacement\n"
 Combinations:
 	
 	#DEBUG DUMMY VALUES
-	li	$s0,	1	#initial value of $s0
-	li	$t1,	6	# n
-	li	$t2,	2	# k
+	#li	$s0,	1	#initial value of $s0
+	#li	$t1,	6	# n
+	#li	$t2,	2	# k
 	#li 	$s1,	1	#combinations w/ Replacement
-	li	$s1,	2 	#combinations w/o Replacement
+	#li	$s1,	2 	#combinations w/o Replacement
 	
 	# Branch to Proper Equation
 	beq	$s1,	1,	CombinationWithReplacement
