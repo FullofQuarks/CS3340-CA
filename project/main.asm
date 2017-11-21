@@ -20,7 +20,7 @@ prompt_probabiltySuccess:		.asciiz "Please enter the probabilty of success: "
 msg_equationSelection:			.asciiz "\nSelect an equation by entering the number fo the equation below:\n"
 msg_combinationsWithReplacement:	.asciiz "1) Combinations with replacement\n"
 msg_combinationsWithoutReplacement:	.asciiz "2) Combinations without replacement\n"
-msg_permutationsWithReplacement:	.asciiz "3) Combinations with replacement\n"
+msg_permutationsWithReplacement:	.asciiz "3) Permutations with replacement\n"
 msg_permutationsWithoutReplacement:	.asciiz "4) Permutations without replacement\n"
 msg_binomialPDF:			.asciiz "5) Binomial PDF\n"
 msg_exit:				.asciiz	"0) Exit\n\n"
@@ -155,7 +155,8 @@ returnValueOfOne:
 
 
 Combinatorics_prep:
-	
+
+	addi	$s0,	$s0,	1
 	beq	$s1,	1,	Combinations_prep
 	beq	$s1,	2,	Combinations_prep
 	beq	$s1,	3,	Permutations_prep
@@ -168,7 +169,7 @@ Binomial_prep:
 	j	displayMenu	
 	
 Combinations_prep:
-
+	
 	jal	Combinations
 	j 	displayMenu
 	
