@@ -65,7 +65,7 @@ CombinationWithoutReplacement:
 	
 combinationWithoutReplacement_loop:	# Calculate n! / (n - k)!
 
-	blt 	$t1, 	$t3,	divideByKFactorial_prep	# if n = k then exit loop
+	beq 	$t1, 	$t3,	divideByKFactorial_prep	# if n = k then exit loop
 	mult	$s0,	$t1
 	mflo	$s0				
 	subi	$t1,	$t1,	1
@@ -73,9 +73,10 @@ combinationWithoutReplacement_loop:	# Calculate n! / (n - k)!
 	                            
 divideByKFactorial_prep:		# Preparation for division
 	
-	add	$a0,	$s0,	$zero
-	li	$v0,	1
-	syscall
+	#DEBUG
+	#add	$a0,	$s0,	$zero
+	#li	$v0,	1
+	#syscall
 	
 	mtc1.d	$s0,	$f12	# Move numerator into f0 register for float processing 
 	cvt.d.w	$f12,	$f12	# Convert to double float
