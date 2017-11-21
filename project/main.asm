@@ -11,8 +11,8 @@
 	.data 
 
 prompt_equationSelection:		.asciiz "\nEnter your choice: "
-prompt_n:				.asciiz "Please enter a n greater than or equal to 10: "
-prompt_k:				.asciiz "Please enter a k greater than or equal to 10: "
+prompt_n:				.asciiz "Please enter a n less than or equal to 10: "
+prompt_k:				.asciiz "Please enter a k less than or equal to 10: "
 prompt_numberOfTrials:			.asciiz "Please enter the total number of trials: "
 prompt_numberOfSuccesses:		.asciiz "Please enter the number of successful trials sought: "
 prompt_probabiltySuccess:		.asciiz "Please enter the probabilty of success: "
@@ -150,8 +150,11 @@ compareCombinatoricValues: # Compare n and k values
 	blt	$s1,	3,	Combinations_prep	
 	j	Permutations_prep
 
-returnValueOfOne:
-	#NICK WE NEED TO ADD THIS HERE.
+returnValueOfOne:	#return a value of 1
+	
+	li	$v0,	1
+	syscall
+	j	displayMenu
 
 
 Combinatorics_prep:
