@@ -7,8 +7,8 @@
 
 .data
 
-pwr:	.asciiz "Permutations with replacement\n"
-pwor:	.asciiz	"Permutations without replacement\n"
+pwr:	.asciiz "\nPermutations with replacement\n"
+pwor:	.asciiz	"\nPermutations without replacement\n"
 
 .text
 
