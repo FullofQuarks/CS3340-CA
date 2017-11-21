@@ -17,11 +17,11 @@ cwr:	.asciiz "\nCombinations with replacement\n"
 Combinations:
 	
 	#DEBUG DUMMY VALUES
-	#li	$s0,	1	#initial value of $s0
-	#li	$t1,	5	# n
-	#li	$t2,	3	# k
+	li	$s0,	1	#initial value of $s0
+	li	$t1,	6	# n
+	li	$t2,	2	# k
 	#li 	$s1,	1	#combinations w/ Replacement
-	#li	$s1,	2 	#combinations w/o Replacement
+	li	$s1,	2 	#combinations w/o Replacement
 	
 	# Branch to Proper Equation
 	beq	$s1,	1,	CombinationWithReplacement
@@ -52,7 +52,7 @@ combinationWithReplacement_loop:	# Calculate: (k + n - 1)! / (n - 1)!
  
 CombinationWithoutReplacement:	
 	# Notes:
-	# n!/(n-k)! = n*(n-1)*(n-2)*...*(k+1) since n >= k
+	# n!/ k!(n-k)! = n*(n-1)*(n-2)*...*(k+1) since n >= k
 	# take n reducing by 1 each time until n = k
 	# then divide everything by k!
 
@@ -60,37 +60,43 @@ CombinationWithoutReplacement:
 	la	$a0,	cwor
 	li	$v0,	4
 	syscall
-
+	
+	sub	$t3,	$t1,	$t2
+	
 combinationWithoutReplacement_loop:	# Calculate n! / (n - k)!
 
-	blt 	$t1, 	$t2,	divideByKFactorial_prep	# if n = k then exit loop
+	blt 	$t1, 	$t3,	divideByKFactorial_prep	# if n = k then exit loop
 	mult	$s0,	$t1
 	mflo	$s0				
 	subi	$t1,	$t1,	1
 	j 	combinationWithoutReplacement_loop	
 	                            
 divideByKFactorial_prep:		# Preparation for division
-
-		mtc1.d	$s0,	$f12	# Move numerator into f0 register for float processing 
-		cvt.d.w	$f12,	$f12	# Convert to double float
+	
+	add	$a0,	$s0,	$zero
+	li	$v0,	1
+	syscall
+	
+	mtc1.d	$s0,	$f12	# Move numerator into f0 register for float processing 
+	cvt.d.w	$f12,	$f12	# Convert to double float
 		
-		mtc1.d	$t2,	$f2	# Move k into f2 for float processing
-		cvt.d.w	$f2,	$f2	# Convert to double float
+	mtc1.d	$t2,	$f2	# Move k into f2 for float processing
+	cvt.d.w	$f2,	$f2	# Convert to double float
 		
-		li	$t7,	1	# Load value of 1 into register
-		mtc1.d	$t7,	$f4	# Move into f4 register for float processing
-		cvt.d.w	$f4,	$f4	# Convert to double float
+	li	$t7,	1	# Load value of 1 into register
+	mtc1.d	$t7,	$f4	# Move into f4 register for float processing
+	cvt.d.w	$f4,	$f4	# Convert to double float
 		
 divideByKFactorial_loop: # Loop for calculation
 
-		beq	$t2,	0,	combinationsPrintResults
-		div.d	$f12,	$f12,	$f2	# Divide numerator by denominator
-		sub.d	$f2,	$f2,	$f4	# Subtract k by 1
-		subi	$t2,	$t2,	1	# Subtract index by 1 - This makes is easier for the comparison
-		j	divideByKFactorial_loop
+	beq	$t2,	0,	combinationsPrintResults
+	div.d	$f12,	$f12,	$f2	# Divide numerator by denominator
+	sub.d	$f2,	$f2,	$f4	# Subtract k by 1
+	subi	$t2,	$t2,	1	# Subtract index by 1 - This makes is easier for the comparison
+	j	divideByKFactorial_loop
 		
 combinationsPrintResults:	# Output the results of the calculation
 		
-		li	$v0,	3	
-		syscall
-		jr	$ra	# Jump back to main program. 
+	li	$v0,	3	
+	syscall
+	jr	$ra	# Jump back to main program. 
