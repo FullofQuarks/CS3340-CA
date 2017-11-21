@@ -159,7 +159,7 @@ returnValueOfOne:	#return a value of 1
 
 Combinatorics_prep:
 
-	addi	$s0,	$s0,	1
+	li	$s0,	1
 	beq	$s1,	1,	Combinations_prep
 	beq	$s1,	2,	Combinations_prep
 	beq	$s1,	3,	Permutations_prep
