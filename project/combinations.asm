@@ -7,8 +7,8 @@
 
 .data
 
-cwor:	.asciiz	"Combinations without replacement\n"
-cwr:	.asciiz "Combinations with replacement\n"
+cwor:	.asciiz	"\nCombinations without replacement\n"
+cwr:	.asciiz "\nCombinations with replacement\n"
 
 .text
 
