@@ -7,8 +7,8 @@
 
 .data
 
-pwr:	.asciiz "\nPermutations with replacement\n"
-pwor:	.asciiz	"\nPermutations without replacement\n"
+pwr:	.asciiz "Permutations with replacement\n"
+pwor:	.asciiz	"Permutations without replacement\n"
 
 .text
 
@@ -53,9 +53,11 @@ PermutationWithoutReplacement:
 	li	$v0,	4
 	syscall
 
+	sub	$t3,	$t1,	$t2
+
 permutationWithoutReplacement_loop:	# Calculate n! / (n - k)!
 
-	blt 	$t1, 	$t2,	permutationsPrintResults	# if n = k then exit loop
+	beq 	$t1, 	$t3,	permutationsPrintResults	# if n = k then exit loop
 	mult	$s0,	$t1
 	mflo	$s0				
 	subi	$t1,	$t1,	1
