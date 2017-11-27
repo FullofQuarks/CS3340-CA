@@ -17,7 +17,7 @@ prompt_numberOfTrials:			.asciiz "Please enter the total number of trials: "
 prompt_numberOfSuccesses:		.asciiz "Please enter the number of successful trials sought: "
 prompt_probabiltySuccess:		.asciiz "Please enter the probabilty of success: "
 
-msg_equationSelection:			.asciiz "\nSelect an equation by entering the number fo the equation below:\n"
+msg_equationSelection:			.asciiz "\nSelect an equation by entering the number for the equation below:\n"
 msg_combinationsWithReplacement:	.asciiz "1) Combinations with replacement\n"
 msg_combinationsWithoutReplacement:	.asciiz "2) Combinations without replacement\n"
 msg_permutationsWithReplacement:	.asciiz "3) Permutations with replacement\n"
@@ -88,13 +88,21 @@ selectEquation:	# Ask for choice and process.
 	li	$v0, 	5	# Get selection
 	syscall	
 	
-	# integer check 1st - NICK we need to immediately check if the user input an invalid number here. 
-	
 	add	$s1,	$zero,	$v0		# Move selection to register $s1	
 	
 	beq	$s1,	0,	exit		# 1st check if the user is trying to exit
-	beq	$s1,	5,	Binomial_prep	# Next check if the binomial equation is selected
-	
+	beq	$s1,	 5,	Binomial_prep	# Next check if the binomial equation is selected
+	beq $s1, 1, selectCombinatorics_n
+	beq $s1, 2, selectCombinatorics_n
+	beq $s1, 3, selectCombinatorics_n
+	beq $s1, 4, selectCombinatorics_n
+
+	#display invalid selection
+	la	$a0,	msg_invalidSelection
+	li	$v0,	4
+	syscall
+	j displayMenu
+
 selectCombinatorics_n:	#Prompt and save n value
 	
 	la	$a0, prompt_n
@@ -102,7 +110,7 @@ selectCombinatorics_n:	#Prompt and save n value
 	syscall
 	
 	li	$v0, 5
-	syscall			#If the user doesn't enter an integer, the error will occur here! - EXPLAIN please
+	syscall			#If the user doesn't enter an integer, the error will occur here!
 	sw	$v0, input_n	# Store the input into input_n variable
 	
 	# If the input is greater than 10, then display error message; Else move on to k input
@@ -133,29 +141,14 @@ compareCombinatoricValues: # Compare n and k values
 	
 	lw	$t1,	input_n
 	lw	$t2,	input_k	
-	
-	beq	$t1,	$t2,	returnValueOfOne	#if n = k then return 1
-	blt	$t2,	$t1,	Combinatorics_prep	# valid values of n & k, begin processing with these values		
-	la	$a0,	msg_error_overflow
+
+	addi		$t6, $t1, 1
+
+	blt	$t2,$t6,	Combinatorics_prep	# valid values of n & k, begin processing with these values	
+	la	$a0,	msg_error_nLessThanK
 	li	$v0,	4
 	syscall
 	j	selectCombinatorics_n
-	
-	blt	$s1,	3,	Combinations_prep
-	j	Permutations_prep
-	
-	# Navigate to proper menus
-	
-	beq	$s1,	5,	Binomial_prep
-	blt	$s1,	3,	Combinations_prep	
-	j	Permutations_prep
-
-returnValueOfOne:	#return a value of 1
-	
-	li	$v0,	1
-	syscall
-	j	displayMenu
-
 
 Combinatorics_prep:
 
@@ -164,7 +157,6 @@ Combinatorics_prep:
 	beq	$s1,	2,	Combinations_prep
 	beq	$s1,	3,	Permutations_prep
 	beq	$s1,	4,	Permutations_prep
-	#insert invalid selection here	
 	
 Binomial_prep:
 
