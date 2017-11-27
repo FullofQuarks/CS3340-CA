@@ -45,6 +45,7 @@ CombinationWithReplacement:
 combinationWithReplacement_loop:	# Calculate: (k + n - 1)! / (n - 1)!
 
 	beq	$t4, $t5, divideByKFactorial_prep
+	blt	$t4, $t5, divideByKFactorial_prep
 	mult	$s0, $t4
 	mflo	$s0
 	subi	$t4, $t4, 1
@@ -66,6 +67,7 @@ CombinationWithoutReplacement:
 combinationWithoutReplacement_loop:	# Calculate n! / (n - k)!
 
 	beq 	$t1, 	$t3,	divideByKFactorial_prep	# if n = k then exit loop
+	blt 	$t1, 	$t3,	divideByKFactorial_prep
 	mult	$s0,	$t1
 	mflo	$s0				
 	subi	$t1,	$t1,	1
